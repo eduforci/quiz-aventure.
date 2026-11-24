@@ -20,7 +20,7 @@ body{min-height:100%;padding:16px;max-width:480px;margin:0 auto}
 h1{font-size:24px;margin:8px 0}
 .top{display:flex;justify-content:space-between;font-weight:700;margin-bottom:12px}
 .map{display:flex;align-items:center;justify-content:space-between;margin:12px 0 20px}
-.z{width:48px;height:48px;border-radius:50%;background:var(--card);border:3px solid var(--line);display:grid;place-items:center;font-size:22px;opacity:.5}
+.z{width:30px;height:30px;border-radius:50%;background:var(--card);border:3px solid var(--line);display:grid;place-items:center;font-size:15px;opacity:.5}
 .z.done{border-color:var(--ok);opacity:1}
 .z.cur{border-color:var(--pri);opacity:1;transform:scale(1.15)}
 .bar{flex:1;height:4px;background:var(--line);margin:0 2px}
@@ -41,12 +41,61 @@ button.ko{border-color:var(--ko);background:color-mix(in srgb,var(--ko) 20%,var(
 <div id="app"></div>
 <script>
 var Z=[
-{n:"Forêt des Nombres",i:"🌲",c:"Maths",o:"🔑 Clé magique",q:[["Combien font 7 × 8 ?",["54","56","64"],1],["Quel est le double de 35 ?",["70","65","75"],0],["Combien font 144 ÷ 12 ?",["10","12","14"],1],["Combien font 25 % de 200 ?",["25","50","75"],1]]},
-{n:"Désert de l’Anglais",i:"🏜️",c:"Anglais",o:"🧭 Boussole",q:[["Comment dit-on « chat » en anglais ?",["Dog","Cat","Bird"],1],["Comment dit-on « rouge » en anglais ?",["Red","Blue","Green"],0],["Complète : I ___ a student.",["am","is","are"],0],["Complète : They ___ my friends.",["is","are","am"],1]]},
-{n:"Lac des Sciences",i:"🌊",c:"Sciences",o:"🧪 Potion",q:[["Quelle planète est la plus proche du Soleil ?",["Mercure","Mars","Vénus"],0],["De quoi les plantes ont-elles besoin pour faire la photosynthèse ?",["De la lumière","Du sable","Du sucre"],0],["Quel organe pompe le sang ?",["Le cœur","Le foie","Le poumon"],0],["À quelle température l’eau bout-elle ?",["50 °C","100 °C","150 °C"],1]]},
-{n:"Montagne des Mots",i:"⛰️",c:"Français",o:"📜 Parchemin",q:[["Quel est le pluriel de « cheval » ?",["chevals","chevaux","chevaus"],1],["Quel mot est un verbe ?",["courir","rapide","maison"],0],["Quel est le féminin de « acteur » ?",["actrice","acteuse","acteure"],0],["Complète : Les enfants ___ dans la cour.",["joue","jouent","jouez"],1]]},
-{n:"Château du Trésor",i:"🏰",c:"Maths",o:"👑 Couronne",q:[["Combien y a-t-il de minutes dans 2 heures ?",["100","120","180"],1],["Quel est le périmètre d’un carré de côté 6 ?",["24","12","36"],0],["Quelle est l’aire d’un rectangle de 8 cm sur 5 cm ?",["40 cm²","13 cm²","26 cm²"],0],["Combien font 3/4 de 80 ?",["20","60","64"],1]]}
+{n:"Forêt des Nombres",i:"🌲",c:"Maths",o:"🔑 Clé magique",q:[["Combien font 7 × 8 ?",["54","56","64"],1],["Quel est le double de 35 ?",["70","65","75"],0],["Combien font 144 ÷ 12 ?",["10","12","14"],1],["Combien font 25 % de 200 ?",["25","50","75"],1],["Combien font 9 × 6 ?",["54","56","63"],0],["Combien font 15 + 28 ?",["43","42","53"],0],["Quelle est la moitié de 126 ?",["53","63","73"],1],["Combien font 12 × 12 ?",["124","144","164"],1],["Quelle est la racine carrée de 81 ?",["8","9","10"],1],["Combien font 100 − 37 ?",["63","67","73"],0]]},
+{n:"Désert de l’Anglais",i:"🏜️",c:"Anglais",o:"🧭 Boussole",q:[["Comment dit-on « chat » en anglais ?",["Dog","Cat","Bird"],1],["Comment dit-on « rouge » en anglais ?",["Red","Blue","Green"],0],["Complète : I ___ a student.",["am","is","are"],0],["Complète : They ___ my friends.",["is","are","am"],1],["Que veut dire « house » ?",["Maison","Voiture","Jardin"],0],["Que veut dire « book » ?",["Cahier","Livre","Stylo"],1],["Comment dit-on « merci » en anglais ?",["Please","Sorry","Thank you"],2],["Quel est le contraire de « big » ?",["Small","Tall","Fast"],0],["Comment dit-on « eau » en anglais ?",["Milk","Water","Juice"],1],["Complète : She ___ a teacher.",["are","am","is"],2]]},
+{n:"Lac des Sciences",i:"🌊",c:"Sciences",o:"🧪 Potion",q:[["Quelle planète est la plus proche du Soleil ?",["Mercure","Mars","Vénus"],0],["De quoi les plantes ont-elles besoin pour faire la photosynthèse ?",["De la lumière","Du sable","Du sucre"],0],["Quel organe pompe le sang ?",["Le cœur","Le foie","Le poumon"],0],["À quelle température l’eau bout-elle ?",["50 °C","100 °C","150 °C"],1],["Quel gaz respirons-nous pour vivre ?",["Le gaz carbonique","L’oxygène","L’azote"],1],["Combien y a-t-il de planètes dans le système solaire ?",["7","8","9"],1],["Quelle planète est appelée la planète rouge ?",["Jupiter","Saturne","Mars"],2],["Quel animal est un mammifère ?",["Le requin","Le dauphin","Le crocodile"],1],["Combien d’os environ chez un adulte ?",["106","206","306"],1],["De quoi l’eau est-elle composée ?",["Hydrogène et oxygène","Carbone et azote","Sel et sucre"],0]]},
+{n:"Montagne des Mots",i:"⛰️",c:"Français",o:"📜 Parchemin",q:[["Quel est le pluriel de « cheval » ?",["chevals","chevaux","chevaus"],1],["Quel mot est un verbe ?",["courir","rapide","maison"],0],["Quel est le féminin de « acteur » ?",["actrice","acteuse","acteure"],0],["Complète : Les enfants ___ dans la cour.",["joue","jouent","jouez"],1],["Quel est le contraire de « grand » ?",["Large","Petit","Long"],1],["Complète : Nous ___ au marché.",["vais","allons","vont"],1],["Quel mot est un adjectif ?",["rapide","courir","table"],0],["Quel est le participe passé de « prendre » ?",["prendu","pris","prit"],1],["Combien de syllabes y a-t-il dans « ordinateur » ?",["3","4","5"],1],["Quel est le pluriel de « bijou » ?",["bijous","bijoux","bijoues"],1]]},
+{n:"Château du Trésor",i:"🏰",c:"Maths",o:"👑 Couronne",q:[["Combien y a-t-il de minutes dans 2 heures ?",["100","120","180"],1],["Quel est le périmètre d’un carré de côté 6 ?",["24","12","36"],0],["Quelle est l’aire d’un rectangle de 8 cm sur 5 cm ?",["40 cm²","13 cm²","26 cm²"],0],["Combien font 3/4 de 80 ?",["20","60","64"],1],["Combien de côtés a un hexagone ?",["5","6","8"],1],["Quel est le triple de 25 ?",["50","75","100"],1],["Combien font 10 % de 450 ?",["4,5","45","90"],1],["Quelle est l’aire d’un carré de côté 7 ?",["14","28","49"],2],["Combien de secondes y a-t-il dans 3 minutes ?",["120","180","360"],1],["Combien font 1 000 ÷ 8 ?",["100","125","150"],1]]},
+{n:"Volcan des Équations",i:"🌋",c:"Maths",o:"🔥 Gemme de feu",q:[["Combien font 15 × 15 ?",["215","225","235"],1],["Combien font 2⁵ ?",["10","25","32"],2],["Combien font 3 + 4 × 2 ?",["14","11","10"],1],["Combien font 20 % de 350 ?",["60","70","75"],1],["Combien font 0,5 × 40 ?",["20","80","2"],0],["Quel est le plus petit nombre premier ?",["1","2","3"],1],["Combien font 17 × 3 ?",["41","51","61"],1],["Combien de degrés mesure un angle droit ?",["45","90","180"],1],["Combien font 1/2 + 1/4 ?",["2/6","3/4","1/6"],1],["Combien font 999 + 1 ?",["1 000","1 100","990"],0]]},
+{n:"Île de l’Anglais",i:"🏝️",c:"Anglais",o:"🐚 Coquillage d’or",q:[["Comment dit-on « école » en anglais ?",["School","Hospital","Market"],0],["Que veut dire « Good morning » ?",["Bonsoir","Bonjour","Bonne nuit"],1],["Comment dit-on « vert » en anglais ?",["Green","Grey","Gold"],0],["Complète : We ___ happy.",["is","am","are"],2],["Que veut dire « friend » ?",["Frère","Ami","Voisin"],1],["Comment dit-on « trois » en anglais ?",["Two","Three","Tree"],1],["Quel est le contraire de « hot » ?",["Cold","Warm","Dry"],0],["Comment dit-on « pomme » en anglais ?",["Orange","Apple","Banana"],1],["Complète : He ___ football every day.",["play","plays","playing"],1],["Que veut dire « Where are you? » ?",["Qui es-tu ?","Où es-tu ?","Quand viens-tu ?"],1]]},
+{n:"Grotte des Sciences",i:"🦇",c:"Sciences",o:"💎 Cristal",q:[["Quel organe nous permet de respirer ?",["Les poumons","L’estomac","Le cerveau"],0],["Combien de dents a un adulte, en général ?",["22","32","42"],1],["Quel est le plus grand animal terrestre ?",["L’éléphant","La girafe","Le rhinocéros"],0],["Que boivent les plantes par leurs racines ?",["De l’huile","De l’eau","Du lait"],1],["À quelle température l’eau gèle-t-elle ?",["0 °C","10 °C","−10 °C"],0],["Quel os protège le cerveau ?",["Le crâne","Le fémur","Le sternum"],0],["Quelle étoile éclaire notre système solaire ?",["La Lune","Le Soleil","Mars"],1],["Combien de pattes a une araignée ?",["6","8","10"],1],["Quel sens utilise les yeux ?",["L’ouïe","La vue","Le goût"],1],["Comment appelle-t-on un animal qui mange uniquement des plantes ?",["Carnivore","Herbivore","Omnivore"],1]]},
+{n:"Tour des Mots",i:"🗼",c:"Français",o:"🪄 Baguette",q:[["Complète : Il ___ beau aujourd’hui.",["fait","font","faites"],0],["Quel est le féminin de « chanteur » ?",["chanteuse","chantrice","chanteure"],0],["Quel mot est un nom ?",["maison","manger","joli"],0],["Complète : Tu ___ très gentil.",["es","est","ai"],0],["Quel est le contraire de « lourd » ?",["Épais","Léger","Gros"],1],["Quel est le pluriel de « journal » ?",["journals","journaux","journaus"],1],["Complète : J’___ mangé du riz.",["ai","suis","est"],0],["Quel mot est bien écrit ?",["Chapeau","Chapaux","Chappeau"],0],["Quel est le synonyme de « content » ?",["Triste","Heureux","Fâché"],1],["Combien de lettres y a-t-il dans l’alphabet français ?",["24","26","28"],1]]},
+{n:"Palais des Légendes",i:"🏯",c:"Culture générale",o:"🏆 Grand trésor",q:[["Quelle est la capitale de la Côte d’Ivoire ?",["Abidjan","Yamoussoukro","Bouaké"],1],["Combien y a-t-il de jours dans une année non bissextile ?",["364","365","366"],1],["Combien de mois ont 31 jours ?",["5","7","8"],1],["Quel est le plus long fleuve d’Afrique ?",["Le Niger","Le Nil","Le Congo"],1],["Quel océan borde l’Afrique de l’Ouest ?",["Pacifique","Indien","Atlantique"],2],["Combien de joueurs une équipe de football aligne-t-elle sur le terrain ?",["9","11","13"],1],["Quelle est la couleur du milieu du drapeau ivoirien ?",["Blanc","Vert","Orange"],0],["Quel est le plus grand désert chaud du monde ?",["Le Sahara","Le Kalahari","Le Gobi"],0],["Combien d’heures y a-t-il dans une journée ?",["12","24","48"],1],["Quel instrument a des touches noires et blanches ?",["La guitare","Le piano","La flûte"],1]]}
 ];
+var P,S=[];
+//GEN_START
+(function(){
+function nq(t,r,u){u=u||"";var d=sh([r+1,r-1,r+2,r-2,r+3,r-3,r+5,r-5,r+10,r-10,r*2]).filter(function(x,i,a){return x>0&&x!=r&&a.indexOf(x)==i});return[t,[r+u,d[0]+u,d[1]+u],0]}
+function pq(s,f,x){var L=s.split(",").map(function(a){return a.split(":")});return L.map(function(p){var d=x?x(p):sh(L.filter(function(y){return y!=p&&y[1]!=p[1]})).slice(0,2).map(function(y){return y[1]});return[f.replace("X",p[0]),[p[1],d[0],d[1]],0]})}
+function rv(s){return s.split(",").map(function(a){return a.split(":").reverse().join(":")}).join(",")}
+function ad(k,a){var t=Z[k].q.map(function(q){return q[0]});Z[k].q=Z[k].q.concat(a.filter(function(x){return t.indexOf(x[0])<0}))}
+function cj(){var V={"être":"suis,es,est,sommes,êtes,sont","avoir":"ai,as,a,avons,avez,ont","aller":"vais,vas,va,allons,allez,vont","faire":"fais,fais,fait,faisons,faites,font","dire":"dis,dis,dit,disons,dites,disent","pouvoir":"peux,peux,peut,pouvons,pouvez,peuvent","vouloir":"veux,veux,veut,voulons,voulez,veulent","prendre":"prends,prends,prend,prenons,prenez,prennent"},Pn=["Je","Tu","Il","Nous","Vous","Ils"],g=[];Object.keys(V).forEach(function(v){var f=V[v].split(",");f.forEach(function(a,i){var d=sh(f.filter(function(x,j){return x!=a&&f.indexOf(x)==j})).slice(0,2);g.push(["Complète : "+(i==0&&a=="ai"?"J’":Pn[i]+" ")+"___ ("+v+")",[a,d[0],d[1]],0])})});return g}
+var g=[],a,b,n;
+for(a=3;a<=12;a++)for(b=a;b<=12;b++)g.push(nq("Combien font "+a+" × "+b+" ?",a*b));
+for(n=12;n<=60;n+=4)g.push(nq("Quel est le double de "+n+" ?",n*2));
+for(n=20;n<=100;n+=8)g.push(nq("Quelle est la moitié de "+n+" ?",n/2));
+ad(0,g);
+g=[];
+for(n=3;n<=20;n++)g.push(nq("Quel est le périmètre d’un carré de côté "+n+" cm ?",4*n," cm"));
+for(n=3;n<=15;n++)g.push(nq("Quelle est l’aire d’un carré de côté "+n+" cm ?",n*n," cm²"));
+for(a=4;a<=9;a++)for(b=a+1;b<=a+3;b++)g.push(nq("Quelle est l’aire d’un rectangle de "+a+" cm sur "+b+" cm ?",a*b," cm²"));
+[10,20,25,50].forEach(function(p){[40,80,120,200,300].forEach(function(m){g.push(nq("Combien font "+p+" % de "+m+" ?",m*p/100))})});
+for(n=2;n<=9;n++)g.push(nq("Combien y a-t-il de minutes dans "+n+" heures ?",n*60));
+ad(4,g);
+g=[];
+for(n=11;n<=25;n++)g.push(nq("Combien font "+n+" × "+n+" ?",n*n));
+for(n=2;n<=9;n++)g.push(nq("Combien font "+n+"³ ?",n*n*n));
+for(a=2;a<=9;a++){g.push(nq("Combien font "+a+" + "+(a+1)+" × "+(a+2)+" ?",a+(a+1)*(a+2)));g.push(nq("Combien font "+(a+1)+" × "+(a+2)+" − "+a+" ?",(a+1)*(a+2)-a))}
+for(n=3;n<=15;n++)g.push(nq("Quelle est la racine carrée de "+n*n+" ?",n));
+[15,30,40,60,75].forEach(function(p){[20,40,60,80,100,200].forEach(function(m){g.push(nq("Combien font "+p+" % de "+m+" ?",m*p/100))})});
+for(a=13;a<=19;a++)[3,4,6,7].forEach(function(m){g.push(nq("Combien font "+a+" × "+m+" ?",a*m))});
+ad(5,g);
+var V1="chat:cat,chien:dog,oiseau:bird,poisson:fish,cheval:horse,vache:cow,mouton:sheep,singe:monkey,maison:house,école:school,livre:book,chaise:chair,porte:door,fenêtre:window,lit:bed,voiture:car,vélo:bike,arbre:tree,fleur:flower,soleil:sun,lune:moon,étoile:star,pluie:rain,eau:water,lait:milk,pain:bread,pomme:apple,banane:banana,riz:rice,viande:meat,fromage:cheese,mère:mother,père:father,frère:brother,sœur:sister,ami:friend,enfant:child,professeur:teacher";
+var V2="rouge:red,bleu:blue,vert:green,jaune:yellow,noir:black,blanc:white,un:one,deux:two,trois:three,quatre:four,cinq:five,dix:ten,lundi:Monday,mardi:Tuesday,mercredi:Wednesday,jeudi:Thursday,vendredi:Friday,samedi:Saturday,dimanche:Sunday,grand:big,petit:small,chaud:hot,froid:cold,rapide:fast,lent:slow,content:happy,triste:sad,bonjour:hello,merci:thank you,au revoir:goodbye,nuit:night,jour:day,main:hand,tête:head,pied:foot,œil:eye,bouche:mouth,nez:nose";
+ad(1,pq(V1,"Comment dit-on « X » en anglais ?").concat(pq(rv(V1),"Que veut dire « X » ?")));
+ad(6,pq(V2,"Comment dit-on « X » en anglais ?").concat(pq(rv(V2),"Que veut dire « X » ?")));
+var PL="cheval:chevaux,journal:journaux,bijou:bijoux,animal:animaux,hôpital:hôpitaux,travail:travaux,chou:choux,genou:genoux,caillou:cailloux,hibou:hiboux,bateau:bateaux,gâteau:gâteaux,oiseau:oiseaux,château:châteaux,cheveu:cheveux,jeu:jeux,feu:feux,neveu:neveux,nez:nez,voix:voix,tapis:tapis,souris:souris,œil:yeux,cadeau:cadeaux,couteau:couteaux,tuyau:tuyaux";
+var FE="acteur:actrice,chanteur:chanteuse,boulanger:boulangère,directeur:directrice,roi:reine,garçon:fille,frère:sœur,père:mère,oncle:tante,coq:poule,lion:lionne,chien:chienne,chat:chatte,loup:louve,ami:amie,voisin:voisine,patron:patronne,vendeur:vendeuse,danseur:danseuse,boucher:bouchère,cuisinier:cuisinière,infirmier:infirmière,instituteur:institutrice,prince:princesse,héros:héroïne,neveu:nièce,mari:femme,cheval:jument";
+var CO="grand:petit,gros:mince,haut:bas,long:court,lourd:léger,fort:faible,rapide:lent,chaud:froid,propre:sale,vieux:jeune,riche:pauvre,ouvert:fermé,plein:vide,jour:nuit,entrer:sortir,monter:descendre,arriver:partir,aimer:détester,gagner:perdre,acheter:vendre,commencer:finir,joyeux:triste,facile:difficile,vrai:faux,avant:après,heureux:malheureux,courageux:peureux,sec:mouillé";
+var SY="content:heureux,triste:malheureux,beau:joli,grand:immense,petit:minuscule,fatigué:épuisé,fâché:furieux,difficile:compliqué,facile:simple,commencer:débuter,finir:terminer,regarder:observer,cacher:dissimuler,chemin:route,travail:emploi,médecin:docteur,voiture:auto,bateau:navire,peur:crainte,froid:glacial,chaud:brûlant,fort:puissant";
+ad(3,pq(PL,"Quel est le pluriel de « X » ?",function(p){return[p[0]+"s",p[0]+"es"]}).concat(pq(FE,"Quel est le féminin de « X » ?"),pq(CO,"Quel est le contraire de « X » ?")));
+ad(8,pq(SY,"Quel est le synonyme de « X » ?").concat(cj()));
+})();
+//GEN_END
+function sh(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function ld(){try{return JSON.parse(localStorage.getItem("qa_seen")||"[]")}catch(e){return[]}}
+function st(){try{localStorage.setItem("qa_seen",JSON.stringify(S))}catch(e){}}
+function pick(k){var b=Z[k].q.map(function(q,i){return{q:q,id:k+"-"+i}}),f=b.filter(function(x){return S.indexOf(x.id)<0});if(f.length<4){S=S.filter(function(x){return x.split("-")[0]!=k});f=b}return sh(f).slice(0,4).map(function(x){S.push(x.id);var c=x.q[1][x.q[2]],o=sh(x.q[1]);return[x.q[0],o,o.indexOf(c)]})}
 var z,qi,vies,pts,inv,serie,errZ,bad,bm,son=true,ac,app=document.getElementById("app");
 var B={zone:"🎯 Sans faute : une zone sans erreur",serie:"🔥 Série de 5 bonnes réponses",cent:"⭐ 100 points",champ:"👑 Champion : trésor trouvé"};
 function bdg(id,c){if(!c||bad.indexOf(id)>-1)return"";bad.push(id);jou("badge");return"<br>🏅 Nouveau badge : "+B[id]}
@@ -55,13 +104,13 @@ function jou(s){if(!son)return;try{ac=ac||new (window.AudioContext||window.webki
 var S={ok:[[660,0,.12],[880,.1,.2]],ko:[[200,0,.3,"sawtooth"]],zone:[[523,0,.12],[659,.12,.12],[784,.24,.12],[1047,.36,.3]],badge:[[880,0,.1],[1175,.1,.1],[1568,.2,.3]],win:[[523,0,.15],[659,.15,.15],[784,.3,.15],[1047,.45,.5]],lose:[[300,0,.2],[220,.2,.2],[150,.4,.4]]};
 (S[s]||[]).forEach(function(n){nt(n[0],n[1],n[2],n[3])})}
 document.addEventListener("click",function(e){if(e.target.id=="snb"){son=!son;e.target.textContent=son?"🔊":"🔇"}});
-function start(){z=0;qi=0;vies=5;pts=0;inv=[];serie=0;errZ=0;bad=[];bm="";play()}
+function start(){S=ld();P=Z.map(function(a,k){return pick(k)});st();z=0;qi=0;vies=5;pts=0;inv=[];serie=0;errZ=0;bad=[];bm="";play()}
 function hdr(){return '<div class="top"><span>❤️ '+vies+'</span><span>⭐ '+pts+'</span><span>🏅 '+bad.length+'</span><span id="snb" style="cursor:pointer">'+(son?'🔊':'🔇')+'</span></div>'+
  '<div class="map">'+Z.map(function(a,k){return (k?'<div class="bar"></div>':'')+'<div class="z '+(k<z?'done':k==z?'cur':'')+'">'+a.i+'</div>'}).join('')+'</div>'}
 function play(){
  if(vies<=0)return end(false);
  if(z>=Z.length)return end(true);
- var Q=Z[z].q[qi];
+ var Q=P[z][qi];
  app.innerHTML=hdr()+'<div class="card"><div class="cat">'+Z[z].n+' · '+Z[z].c+'</div><div class="q">'+Q[0]+'</div>'+
  Q[1].map(function(t,k){return '<button data-k="'+k+'">'+t+'</button>'}).join('')+'<div class="msg" id="m"></div></div>';
  app.querySelectorAll("button").forEach(function(b){b.onclick=function(){answer(+b.dataset.k,Q)}});
@@ -76,9 +125,9 @@ function answer(k,Q){
 }
 function next(){
  qi++;
- if(qi>=Z[z].q.length&&vies>0){inv.push(Z[z].o);bm=bdg("zone",errZ==0);errZ=0;jou("zone");qi=0;z++;
-  if(z<Z.length){app.innerHTML=hdr()+'<div class="card"><div class="big">'+Z[z-1].o.split(" ")[0]+'</div><div class="q" style="text-align:center">Zone réussie ! Tu gagnes : '+Z[z-1].o+bm+'</div><button class="main" id="go">Continuer l’aventure</button></div>';
-   document.getElementById("go").onclick=play;return}}
+ if(qi>=P[z].length&&vies>0){inv.push(Z[z].o);bm=bdg("zone",errZ==0);errZ=0;jou("zone");qi=0;z++;
+  if(z<Z.length){app.innerHTML=hdr()+'<div class="card"><div class="big">'+Z[z-1].o.split(" ")[0]+'</div><div class="q" style="text-align:center">Zone réussie ! Tu gagnes : '+Z[z-1].o+bm+'</div><p style="text-align:center;color:var(--mut)">Zone suivante…</p></div>';
+   setTimeout(play,2400);return}}
  play();
 }
 function end(w){if(w)bdg("champ",1);jou(w?"win":"lose");
