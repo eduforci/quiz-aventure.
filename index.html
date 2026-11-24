@@ -96,7 +96,7 @@ function sh(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.r
 function ld(){try{return JSON.parse(localStorage.getItem("qa_seen")||"[]")}catch(e){return[]}}
 function st(){try{localStorage.setItem("qa_seen",JSON.stringify(S))}catch(e){}}
 function pick(k){var b=Z[k].q.map(function(q,i){return{q:q,id:k+"-"+i}}),f=b.filter(function(x){return S.indexOf(x.id)<0});if(f.length<4){S=S.filter(function(x){return x.split("-")[0]!=k});f=b}return sh(f).slice(0,4).map(function(x){S.push(x.id);var c=x.q[1][x.q[2]],o=sh(x.q[1]);return[x.q[0],o,o.indexOf(c)]})}
-var z,qi,vies,pts,inv,serie,errZ,bad,bm,son=true,ac,app=document.getElementById("app");
+var TOTAL=600,LV=[["🟢 Facile",600],["🟠 Moyen",300],["🔴 Difficile",180]],lvn="",tm,tid,over,z,qi,vies,pts,inv,serie,errZ,bad,bm,son=true,ac,app=document.getElementById("app");
 var B={zone:"🎯 Sans faute : une zone sans erreur",serie:"🔥 Série de 5 bonnes réponses",cent:"⭐ 100 points",champ:"👑 Champion : trésor trouvé"};
 function bdg(id,c){if(!c||bad.indexOf(id)>-1)return"";bad.push(id);jou("badge");return"<br>🏅 Nouveau badge : "+B[id]}
 function nt(f,t,d,ty){try{var o=ac.createOscillator(),g=ac.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(.15,ac.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+t+d);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+t);o.stop(ac.currentTime+t+d)}catch(e){}}
@@ -104,10 +104,13 @@ function jou(s){if(!son)return;try{ac=ac||new (window.AudioContext||window.webki
 var S={ok:[[660,0,.12],[880,.1,.2]],ko:[[200,0,.3,"sawtooth"]],zone:[[523,0,.12],[659,.12,.12],[784,.24,.12],[1047,.36,.3]],badge:[[880,0,.1],[1175,.1,.1],[1568,.2,.3]],win:[[523,0,.15],[659,.15,.15],[784,.3,.15],[1047,.45,.5]],lose:[[300,0,.2],[220,.2,.2],[150,.4,.4]]};
 (S[s]||[]).forEach(function(n){nt(n[0],n[1],n[2],n[3])})}
 document.addEventListener("click",function(e){if(e.target.id=="snb"){son=!son;e.target.textContent=son?"🔊":"🔇"}});
-function start(){S=ld();P=Z.map(function(a,k){return pick(k)});st();z=0;qi=0;vies=5;pts=0;inv=[];serie=0;errZ=0;bad=[];bm="";play()}
-function hdr(){return '<div class="top"><span>❤️ '+vies+'</span><span>⭐ '+pts+'</span><span>🏅 '+bad.length+'</span><span id="snb" style="cursor:pointer">'+(son?'🔊':'🔇')+'</span></div>'+
+function menu(){over=true;clearInterval(tid);app.innerHTML='<div class="card"><div class="q" style="text-align:center">Choisis ton niveau</div>'+LV.map(function(l,i){return '<button class="main" data-l="'+i+'">'+l[0]+' · '+Math.round(l[1]/60)+' min</button>'}).join("")+'<p style="text-align:center;color:var(--mut)">Termine les 10 zones avant la fin du temps !</p></div>';app.querySelectorAll("button").forEach(function(b){b.onclick=function(){var l=LV[+b.dataset.l];lvn=l[0];TOTAL=l[1];start()}})}
+function fmt(t){return Math.floor(t/60)+":"+("0"+t%60).slice(-2)}
+function tick(){if(over)return;tm--;var e=document.getElementById("tmr");if(e){e.textContent="⏱️ "+fmt(tm);e.style.color=tm<=30?"var(--ko)":""}if(tm<=0)end(false,true)}
+function start(){S=ld();P=Z.map(function(a,k){return pick(k)});st();z=0;qi=0;vies=5;pts=0;inv=[];serie=0;errZ=0;bad=[];bm="";over=false;tm=TOTAL;clearInterval(tid);tid=setInterval(tick,1000);play()}
+function hdr(){return '<div class="top"><span>❤️ '+vies+'</span><span>⭐ '+pts+'</span><span>🏅 '+bad.length+'</span><span id="tmr">⏱️ '+fmt(tm)+'</span><span id="snb" style="cursor:pointer">'+(son?'🔊':'🔇')+'</span></div>'+
  '<div class="map">'+Z.map(function(a,k){return (k?'<div class="bar"></div>':'')+'<div class="z '+(k<z?'done':k==z?'cur':'')+'">'+a.i+'</div>'}).join('')+'</div>'}
-function play(){
+function play(){if(over)return;
  if(vies<=0)return end(false);
  if(z>=Z.length)return end(true);
  var Q=P[z][qi];
@@ -119,22 +122,22 @@ function answer(k,Q){
  var bs=app.querySelectorAll("button"),m=document.getElementById("m");
  bs.forEach(function(b){b.disabled=true});
  bs[Q[2]].className="ok";
- if(k==Q[2]){pts+=10;serie++;jou("ok");m.innerHTML="✅ Bravo ! +10 points"+bdg("serie",serie>=5)+bdg("cent",pts>=100)}
+ if(k==Q[2]){pts+=10;serie++;jou("ok");var g1=serie%5==0&&vies<7;if(g1)vies++;m.innerHTML="✅ Bravo ! +10 points"+(g1?"<br>❤️ +1 vie !":"")+bdg("serie",serie>=5)+bdg("cent",pts>=100)}
  else{vies--;serie=0;errZ++;jou("ko");bs[k].className="ko";m.textContent="❌ Raté ! Tu perds une vie"}
  setTimeout(next,1300);
 }
-function next(){
+function next(){if(over)return;
  qi++;
- if(qi>=P[z].length&&vies>0){inv.push(Z[z].o);bm=bdg("zone",errZ==0);errZ=0;jou("zone");qi=0;z++;
+ if(qi>=P[z].length&&vies>0){inv.push(Z[z].o);bm=bdg("zone",errZ==0);if(errZ==0&&vies<7){vies++;bm+="<br>❤️ +1 vie : zone sans faute"}errZ=0;jou("zone");qi=0;z++;
   if(z<Z.length){app.innerHTML=hdr()+'<div class="card"><div class="big">'+Z[z-1].o.split(" ")[0]+'</div><div class="q" style="text-align:center">Zone réussie ! Tu gagnes : '+Z[z-1].o+bm+'</div><p style="text-align:center;color:var(--mut)">Zone suivante…</p></div>';
    setTimeout(play,2400);return}}
  play();
 }
-function end(w){if(w)bdg("champ",1);jou(w?"win":"lose");
- app.innerHTML='<div class="card"><div class="big">'+(w?'🏆':'💔')+'</div><div class="q" style="text-align:center">'+(w?'Félicitations, tu as trouvé le trésor !':'Plus de vies… l’aventure s’arrête ici.')+'</div><p style="text-align:center">Score : ⭐ '+pts+'</p><div class="inv">'+inv.map(function(o){return o.split(" ")[0]}).join(" ")+'</div><p style="text-align:center">'+(bad.length?bad.map(function(b){return B[b]}).join("<br>"):"Aucun badge cette fois")+'</p><button class="main" id="re">Rejouer</button></div>';
- document.getElementById("re").onclick=start;
+function end(w,t){clearInterval(tid);over=true;if(w)bdg("champ",1);jou(w?"win":"lose");
+ app.innerHTML='<div class="card"><div class="big">'+(w?'🏆':t?'⏱️':'💔')+'</div><div class="q" style="text-align:center">'+(w?'Félicitations, tu as trouvé le trésor !':t?'Temps écoulé… l’aventure s’arrête ici.':'Plus de vies… l’aventure s’arrête ici.')+'</div><p style="text-align:center">'+lvn+' · Score : ⭐ '+pts+'</p><div class="inv">'+inv.map(function(o){return o.split(" ")[0]}).join(" ")+'</div><p style="text-align:center">'+(bad.length?bad.map(function(b){return B[b]}).join("<br>"):"Aucun badge cette fois")+'</p><button class="main" id="re">Rejouer</button></div>';
+ document.getElementById("re").onclick=menu;
 }
-start();
+menu();
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js")})}</script>
 </body>
