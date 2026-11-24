@@ -10,6 +10,14 @@
 <meta name="apple-mobile-web-app-title" content="Quiz Aventure">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>Quiz Aventure</title>
+<meta name="description" content="Traverse 10 zones, garde tes vies et bats mon score !">
+<meta property="og:type" content="website">
+<meta property="og:title" content="🗺️ Quiz Aventure">
+<meta property="og:description" content="Traverse 10 zones, garde tes vies et bats mon score !">
+<meta property="og:url" content="https://quiz-aventure.vercel.app">
+<meta property="og:image" content="https://quiz-aventure.vercel.app/icon-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
 <style>
 :root{--bg:#f4f1ff;--card:#fff;--tx:#241b4b;--mut:#6b6490;--pri:#6c4cf1;--ok:#1fa97a;--ko:#e5484d;--line:#ddd6fb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17132b;--card:#241e44;--tx:#f1eeff;--mut:#a59fd0;--pri:#8f78ff;--line:#3a3266}}
@@ -135,7 +143,7 @@ function next(){if(over)return;
 }
 function end(w,t){clearInterval(tid);over=true;if(w)bdg("champ",1);jou(w?"win":"lose");
  app.innerHTML='<div class="card"><div class="big">'+(w?'🏆':t?'⏱️':'💔')+'</div><div class="q" style="text-align:center">'+(w?'Félicitations, tu as trouvé le trésor !':t?'Temps écoulé… l’aventure s’arrête ici.':'Plus de vies… l’aventure s’arrête ici.')+'</div><p style="text-align:center">'+lvn+' · Score : ⭐ '+pts+'</p><div class="inv">'+inv.map(function(o){return o.split(" ")[0]}).join(" ")+'</div><p style="text-align:center">'+(bad.length?bad.map(function(b){return B[b]}).join("<br>"):"Aucun badge cette fois")+'</p><button class="main" id="re">Rejouer</button></div>';
- document.getElementById("re").onclick=menu;
+ document.getElementById("re").onclick=menu;var sb=document.createElement("button");sb.className="main";sb.textContent="📲 Partager mon score";sb.onclick=function(){var m="🗺️ J’ai fait "+pts+" points à Quiz Aventure ("+lvn+") ! Peux-tu faire mieux ? "+"https://quiz-aventure.vercel.app";window.open("https://wa.me/?text="+encodeURIComponent(m))};document.getElementById("re").after(sb);
 }
 menu();
 </script>
