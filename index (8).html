@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6c4cf1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Quiz Aventure">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Quiz Aventure</title>
+<style>
+:root{--bg:#f4f1ff;--card:#fff;--tx:#241b4b;--mut:#6b6490;--pri:#6c4cf1;--ok:#1fa97a;--ko:#e5484d;--line:#ddd6fb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17132b;--card:#241e44;--tx:#f1eeff;--mut:#a59fd0;--pri:#8f78ff;--line:#3a3266}}
+:root[data-theme="dark"]{--bg:#17132b;--card:#241e44;--tx:#f1eeff;--mut:#a59fd0;--pri:#8f78ff;--line:#3a3266}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100%;padding:16px;max-width:480px;margin:0 auto}
+h1{font-size:24px;margin:8px 0}
+.top{display:flex;justify-content:space-between;font-weight:700;margin-bottom:12px}
+.map{display:flex;align-items:center;justify-content:space-between;margin:12px 0 20px}
+.z{width:48px;height:48px;border-radius:50%;background:var(--card);border:3px solid var(--line);display:grid;place-items:center;font-size:22px;opacity:.5}
+.z.done{border-color:var(--ok);opacity:1}
+.z.cur{border-color:var(--pri);opacity:1;transform:scale(1.15)}
+.bar{flex:1;height:4px;background:var(--line);margin:0 2px}
+.card{background:var(--card);border-radius:18px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.cat{color:var(--mut);font-size:13px;font-weight:700;text-transform:uppercase}
+.q{font-size:20px;font-weight:700;margin:8px 0 16px}
+button{font:inherit;width:100%;text-align:left;padding:14px;margin:8px 0;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--tx);cursor:pointer}
+button.main{background:var(--pri);color:#fff;border:0;text-align:center;font-weight:700}
+button.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 20%,var(--card))}
+button.ko{border-color:var(--ko);background:color-mix(in srgb,var(--ko) 20%,var(--card))}
+.msg{min-height:24px;font-weight:700;margin-top:6px}
+.big{font-size:56px;text-align:center}
+.inv{font-size:26px;letter-spacing:4px;text-align:center}
+</style>
+</head>
+<body>
+<h1>🗺️ Quiz Aventure</h1>
+<div id="app"></div>
+<script>
+var Z=[
+{n:"Forêt des Nombres",i:"🌲",c:"Maths",o:"🔑 Clé magique",q:[["Combien font 7 × 8 ?",["54","56","64"],1],["Quel est le double de 35 ?",["70","65","75"],0],["Combien font 144 ÷ 12 ?",["10","12","14"],1],["Combien font 25 % de 200 ?",["25","50","75"],1]]},
+{n:"Désert de l’Anglais",i:"🏜️",c:"Anglais",o:"🧭 Boussole",q:[["Comment dit-on « chat » en anglais ?",["Dog","Cat","Bird"],1],["Comment dit-on « rouge » en anglais ?",["Red","Blue","Green"],0],["Complète : I ___ a student.",["am","is","are"],0],["Complète : They ___ my friends.",["is","are","am"],1]]},
+{n:"Lac des Sciences",i:"🌊",c:"Sciences",o:"🧪 Potion",q:[["Quelle planète est la plus proche du Soleil ?",["Mercure","Mars","Vénus"],0],["De quoi les plantes ont-elles besoin pour faire la photosynthèse ?",["De la lumière","Du sable","Du sucre"],0],["Quel organe pompe le sang ?",["Le cœur","Le foie","Le poumon"],0],["À quelle température l’eau bout-elle ?",["50 °C","100 °C","150 °C"],1]]},
+{n:"Montagne des Mots",i:"⛰️",c:"Français",o:"📜 Parchemin",q:[["Quel est le pluriel de « cheval » ?",["chevals","chevaux","chevaus"],1],["Quel mot est un verbe ?",["courir","rapide","maison"],0],["Quel est le féminin de « acteur » ?",["actrice","acteuse","acteure"],0],["Complète : Les enfants ___ dans la cour.",["joue","jouent","jouez"],1]]},
+{n:"Château du Trésor",i:"🏰",c:"Maths",o:"👑 Couronne",q:[["Combien y a-t-il de minutes dans 2 heures ?",["100","120","180"],1],["Quel est le périmètre d’un carré de côté 6 ?",["24","12","36"],0],["Quelle est l’aire d’un rectangle de 8 cm sur 5 cm ?",["40 cm²","13 cm²","26 cm²"],0],["Combien font 3/4 de 80 ?",["20","60","64"],1]]}
+];
+var z,qi,vies,pts,inv,serie,errZ,bad,bm,son=true,ac,app=document.getElementById("app");
+var B={zone:"🎯 Sans faute : une zone sans erreur",serie:"🔥 Série de 5 bonnes réponses",cent:"⭐ 100 points",champ:"👑 Champion : trésor trouvé"};
+function bdg(id,c){if(!c||bad.indexOf(id)>-1)return"";bad.push(id);jou("badge");return"<br>🏅 Nouveau badge : "+B[id]}
+function nt(f,t,d,ty){try{var o=ac.createOscillator(),g=ac.createGain();o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(.15,ac.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+t+d);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+t);o.stop(ac.currentTime+t+d)}catch(e){}}
+function jou(s){if(!son)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){return}
+var S={ok:[[660,0,.12],[880,.1,.2]],ko:[[200,0,.3,"sawtooth"]],zone:[[523,0,.12],[659,.12,.12],[784,.24,.12],[1047,.36,.3]],badge:[[880,0,.1],[1175,.1,.1],[1568,.2,.3]],win:[[523,0,.15],[659,.15,.15],[784,.3,.15],[1047,.45,.5]],lose:[[300,0,.2],[220,.2,.2],[150,.4,.4]]};
+(S[s]||[]).forEach(function(n){nt(n[0],n[1],n[2],n[3])})}
+document.addEventListener("click",function(e){if(e.target.id=="snb"){son=!son;e.target.textContent=son?"🔊":"🔇"}});
+function start(){z=0;qi=0;vies=5;pts=0;inv=[];serie=0;errZ=0;bad=[];bm="";play()}
+function hdr(){return '<div class="top"><span>❤️ '+vies+'</span><span>⭐ '+pts+'</span><span>🏅 '+bad.length+'</span><span id="snb" style="cursor:pointer">'+(son?'🔊':'🔇')+'</span></div>'+
+ '<div class="map">'+Z.map(function(a,k){return (k?'<div class="bar"></div>':'')+'<div class="z '+(k<z?'done':k==z?'cur':'')+'">'+a.i+'</div>'}).join('')+'</div>'}
+function play(){
+ if(vies<=0)return end(false);
+ if(z>=Z.length)return end(true);
+ var Q=Z[z].q[qi];
+ app.innerHTML=hdr()+'<div class="card"><div class="cat">'+Z[z].n+' · '+Z[z].c+'</div><div class="q">'+Q[0]+'</div>'+
+ Q[1].map(function(t,k){return '<button data-k="'+k+'">'+t+'</button>'}).join('')+'<div class="msg" id="m"></div></div>';
+ app.querySelectorAll("button").forEach(function(b){b.onclick=function(){answer(+b.dataset.k,Q)}});
+}
+function answer(k,Q){
+ var bs=app.querySelectorAll("button"),m=document.getElementById("m");
+ bs.forEach(function(b){b.disabled=true});
+ bs[Q[2]].className="ok";
+ if(k==Q[2]){pts+=10;serie++;jou("ok");m.innerHTML="✅ Bravo ! +10 points"+bdg("serie",serie>=5)+bdg("cent",pts>=100)}
+ else{vies--;serie=0;errZ++;jou("ko");bs[k].className="ko";m.textContent="❌ Raté ! Tu perds une vie"}
+ setTimeout(next,1300);
+}
+function next(){
+ qi++;
+ if(qi>=Z[z].q.length&&vies>0){inv.push(Z[z].o);bm=bdg("zone",errZ==0);errZ=0;jou("zone");qi=0;z++;
+  if(z<Z.length){app.innerHTML=hdr()+'<div class="card"><div class="big">'+Z[z-1].o.split(" ")[0]+'</div><div class="q" style="text-align:center">Zone réussie ! Tu gagnes : '+Z[z-1].o+bm+'</div><button class="main" id="go">Continuer l’aventure</button></div>';
+   document.getElementById("go").onclick=play;return}}
+ play();
+}
+function end(w){if(w)bdg("champ",1);jou(w?"win":"lose");
+ app.innerHTML='<div class="card"><div class="big">'+(w?'🏆':'💔')+'</div><div class="q" style="text-align:center">'+(w?'Félicitations, tu as trouvé le trésor !':'Plus de vies… l’aventure s’arrête ici.')+'</div><p style="text-align:center">Score : ⭐ '+pts+'</p><div class="inv">'+inv.map(function(o){return o.split(" ")[0]}).join(" ")+'</div><p style="text-align:center">'+(bad.length?bad.map(function(b){return B[b]}).join("<br>"):"Aucun badge cette fois")+'</p><button class="main" id="re">Rejouer</button></div>';
+ document.getElementById("re").onclick=start;
+}
+start();
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js")})}</script>
+</body>
+</html>
